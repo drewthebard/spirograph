@@ -1,0 +1,51 @@
+import math
+import turtle
+
+#Edit these values to change the properties of the spirograph
+radius_1 = float(input("What is radius of principle circle?"))
+radius_2 = float(input("What is radius of secondary circle?"))
+
+#My default turtle setup
+wn = turtle.Screen()
+alex = turtle.Turtle()
+alex.speed(0)
+
+def spiro_angle(theta_1, radius_1, radius_2):
+    '''
+    This function finds the angle of the secondary circle as it rotates through the primary circle with a ratio to the principle circle
+    Paramenter:
+        theta_1 = (float) - angle, in radians, in respect to the principle circle to the secondary circle
+        radius_1 = (float) - radius of principle circle
+        radius_2 = (float) radius of secondary circle
+    Returns:
+        theta_2 = (float) angle, in radians, of the secondary circle based appon its position in principle circle
+    '''
+    
+    theta_2 = ((theta_1 * (radius_1 + radius_2)) / radius_2)
+    return(theta_2)
+
+def spiro_pos(theta_1, radius_1, radius_2):
+    '''
+    This function finds the position of a point as it rotates in respect to the principle and secondary circle
+    Parameter:
+        theta_1 = (float) - angle, in radians, in respect to the principle circle to the secondary circle
+        radius_1 = (float) - radius of principle circle
+        radius_2 = (float) - radius of secondary circle
+    Returns:
+        coordinate = (float, float) - the computed coordinate of the the point of the secondary circle
+    '''
+    
+    x = ((radius_1 * math.cos(theta_1)) + (radius_2 * math.cos(spiro_angle(theta_1, radius_1, radius_2))))
+    y = ((radius_1 * math.sin(theta_1)) + (radius_2 * math.sin(spiro_angle(theta_1, radius_1, radius_2))))
+    return(x, y)
+
+ 
+
+#These 3 lines are so the turtle does not draw a line to its starting point when it spawns at (0, 0)
+alex.penup()
+alex.goto(spiro_pos( 0, radius_1, (radius_2)))
+alex.pendown()
+
+#This is the graphical engine. It mathametically represents the (radian * 10). 
+for i in range(20000):
+    alex.goto(spiro_pos((0.1 * i), radius_1, radius_2 ))
